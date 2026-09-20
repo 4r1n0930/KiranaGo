@@ -16,16 +16,16 @@
   align-items: center;
   gap: 10px;
   padding: 14px 32px;
-  background: linear-gradient(135deg, #2563eb, #1d4ed8);
+  background: linear-gradient(135deg, var(--color-ocean-blue), #5074e6);
   color: #ffffff;
-  font-family: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  font-family: var(--font-sans);
   font-size: 1.05rem;
   font-weight: 700;
   letter-spacing: 0.02em;
   text-decoration: none;
   border-radius: 999px;
-  border: 1px solid rgba(255, 255, 255, 0.2);
-  box-shadow: 0 10px 25px rgba(37, 99, 235, 0.45);
+  border: 1px solid rgba(255, 255, 255, 0.25);
+  box-shadow: 0 10px 25px rgba(112, 146, 255, 0.35);
   transition: transform 0.2s, box-shadow 0.2s, background 0.2s;
   cursor: pointer;
   user-select: none;
@@ -33,8 +33,8 @@
 
 .continue-button:hover {
   transform: scale(1.04);
-  box-shadow: 0 14px 30px rgba(37, 99, 235, 0.6), 0 0 0 2px rgba(255, 255, 255, 0.3);
-  background: linear-gradient(135deg, #3b82f6, #2563eb);
+  box-shadow: 0 14px 30px rgba(112, 146, 255, 0.5), 0 0 0 2px rgba(255, 255, 255, 0.3);
+  background: linear-gradient(135deg, #85a3ff, var(--color-ocean-blue));
 }
 
 .continue-button:active {
