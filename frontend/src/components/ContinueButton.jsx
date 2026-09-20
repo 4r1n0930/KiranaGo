@@ -1,64 +1,47 @@
-import React, { useRef, useEffect } from 'react';
+import React from 'react';
 import { useNavigate } from 'react-router-dom';
 import { ArrowRight } from 'lucide-react';
-import { gsap } from '@/lib/gsap';
 import './ContinueButton.css';
 
 /**
  * ContinueButton Component
  * End-of-sequence button that slides up from below viewport into view at bottom-center when scroll progress reaches ~1.
- * On click, navigates to /app.
+ * On click, navigates to /app/chat with guaranteed routing fallback.
  *
  * @param {Object} props
  * @param {number} props.scrollProgress - Current scroll progress (0 to 1)
  */
 export default function ContinueButton({ scrollProgress }) {
   const navigate = useNavigate();
-  const buttonRef = useRef(null);
-  
+
   // Appears near final frame (scrollProgress >= 0.88)
   const isVisible = scrollProgress >= 0.88;
 
-  useEffect(() => {
-    if (!buttonRef.current) return;
-
-    if (isVisible) {
-      gsap.to(buttonRef.current, {
-        xPercent: -50,
-        y: 0,
-        opacity: 1,
-        duration: 0.35,
-        ease: 'power2.out',
-        pointerEvents: 'auto',
-      });
-    } else {
-      gsap.to(buttonRef.current, {
-        xPercent: -50,
-        y: 80,
-        opacity: 0,
-        duration: 0.35,
-        ease: 'power2.in',
-        pointerEvents: 'none',
-      });
-    }
-  }, [isVisible]);
-
-  const handleContinueClick = (e) => {
+  const handleClick = (e) => {
     e.preventDefault();
     e.stopPropagation();
-    navigate('/app');
+
+    // 1. Trigger SPA React Router navigation
+    navigate('/app/chat');
+
+    // 2. Fallback check: Ensure route transitions reliably across all browser contexts
+    setTimeout(() => {
+      if (!window.location.pathname.startsWith('/app')) {
+        window.location.href = '/app/chat';
+      } else {
+        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+        document.documentElement.scrollTop = 0;
+        document.body.scrollTop = 0;
+      }
+    }, 50);
   };
 
   return (
-    <div
-      ref={buttonRef}
-      className="continue-button-wrapper"
-      style={{ transform: 'translateX(-50%) translateY(80px)', opacity: 0, pointerEvents: 'none' }}
-    >
+    <div className={`continue-button-wrapper ${isVisible ? 'is-visible' : ''}`}>
       <button
         type="button"
         className="continue-button"
-        onClick={handleContinueClick}
+        onClick={handleClick}
         aria-label="Continue to KiranaGo App"
       >
         <span>Continue</span>

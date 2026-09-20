@@ -37,13 +37,15 @@ export default function Chat() {
     () => {
       ScrollTrigger.refresh();
 
-      gsap.from('.gsap-chat-reveal', {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-        clearProps: 'opacity,transform',
-      });
+      if (containerRef.current) {
+        gsap.from(containerRef.current, {
+          y: 20,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          clearProps: 'opacity,transform',
+        });
+      }
     },
     { scope: containerRef }
   );
