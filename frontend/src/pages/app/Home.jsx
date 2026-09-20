@@ -2,7 +2,7 @@ import React, { useRef } from 'react';
 import { Link } from 'react-router-dom';
 import { MessageSquare, ShoppingBag, Zap, ShieldCheck, ArrowRight } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import './AppPages.css';
 
 export default function Home() {
@@ -10,12 +10,16 @@ export default function Home() {
 
   useGSAP(
     () => {
+      // Ensure ScrollTrigger recalculates layout dimensions on mount/route transition
+      ScrollTrigger.refresh();
+
       gsap.from('.gsap-reveal', {
         y: 30,
         opacity: 0,
         duration: 0.6,
         stagger: 0.15,
         ease: 'power2.out',
+        clearProps: 'opacity,transform',
       });
     },
     { scope: containerRef }

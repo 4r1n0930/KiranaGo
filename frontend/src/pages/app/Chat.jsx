@@ -1,7 +1,7 @@
 import React, { useState, useRef, useEffect } from 'react';
 import { Send, Bot, User } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import './AppPages.css';
 
 /**
@@ -24,11 +24,14 @@ export default function Chat() {
 
   useGSAP(
     () => {
+      ScrollTrigger.refresh();
+
       gsap.from('.gsap-chat-reveal', {
         y: 20,
         opacity: 0,
         duration: 0.5,
         ease: 'power2.out',
+        clearProps: 'opacity,transform',
       });
     },
     { scope: containerRef }

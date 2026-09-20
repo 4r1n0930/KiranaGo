@@ -1,7 +1,7 @@
 import React, { useState, useRef } from 'react';
 import { ChevronDown, ChevronUp, ShoppingBag, Clock, User, Phone, CheckCircle2 } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
-import { gsap } from '@/lib/gsap';
+import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { MOCK_ORDERS } from '@/data/mockData';
 import './AppPages.css';
 
@@ -18,12 +18,15 @@ export default function Orders() {
 
   useGSAP(
     () => {
+      ScrollTrigger.refresh();
+
       gsap.from('.gsap-orders-reveal', {
         y: 25,
         opacity: 0,
         duration: 0.5,
         stagger: 0.1,
         ease: 'power2.out',
+        clearProps: 'opacity,transform',
       });
     },
     { scope: containerRef }
