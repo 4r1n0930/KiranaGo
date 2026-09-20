@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+:root {
+  /* KiranaGo Design Tokens */
+  --color-abyssal-ink: #090d16;
+  --color-bioluminescent-lime: #a3e635;
+  --color-bone-white: #f7f7f5;
+  --color-paper: #e5e7eb;
+  --color-slate-muted: #9ca3af;
+  --color-ocean-blue: #2563eb;
+  
+  --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
+  --font-display: 'Inter Tight', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
+  --font-mono: 'Roboto Mono', ui-monospace, Consolas, monospace;
+
+  --radius-cards: 20px;
+  --radius-buttons: 999px;
+
+  font: 16px/145% var(--font-sans);
+  color-scheme: dark;
+  color: var(--color-paper);
+  background: var(--color-abyssal-ink);
+  font-synthesis: none;
+  text-rendering: optimizeLegibility;
+  -webkit-font-smoothing: antialiased;
+  -moz-osx-font-smoothing: grayscale;
+}
+
+body {
+  margin: 0;
+  padding: 0;
+  background-color: var(--color-abyssal-ink);
+  overflow-x: hidden;
+}
+
+#root {
+  width: 100%;
+  margin: 0;
+  padding: 0;
+  min-height: 100vh;
+  box-sizing: border-box;
+}
+
+* {
+  box-sizing: border-box;
+}
+
+/* 
+  Glassmorphism Surface Utilities
+  NOTE: This is a deliberate design exception scoped strictly to elevated surfaces
+  (cards, chat bubbles, navigation bars, modals) to maintain contrast over dynamic backgrounds.
+*/
+.glass-panel {
+  background: rgba(247, 247, 245, 0.05);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-cards, 20px);
+}
+
+.glass-panel--dark {
+  background: rgba(9, 13, 22, 0.45);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-cards, 20px);
+  color: var(--color-paper);
+}
+
+.glass-panel--light {
+  background: rgba(255, 255, 255, 0.45);
+  backdrop-filter: blur(22px);
+  -webkit-backdrop-filter: blur(22px);
+  border: 1px solid rgba(255, 255, 255, 0.15);
+  border-radius: var(--radius-cards, 20px);
+  color: #111827;
+}
