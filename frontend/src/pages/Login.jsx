@@ -16,7 +16,7 @@ export default function Login() {
     <div className="login-page-container">
       <div className="login-card">
         <div className="login-header">
-          <Link to="/" className="login-logo">KiranaGo 🏬</Link>
+          <Link to="/app" className="login-logo">KiranaGo 🏬</Link>
           <h2>Shopkeeper Login</h2>
           <p>Enter your registered mobile number to manage your digital store</p>
         </div>

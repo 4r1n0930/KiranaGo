@@ -21,19 +21,11 @@ export default function ContinueButton({ scrollProgress }) {
     e.preventDefault();
     e.stopPropagation();
 
-    // 1. Trigger SPA React Router navigation
+    // Trigger SPA React Router navigation
     navigate('/app/chat');
-
-    // 2. Fallback check: Ensure route transitions reliably across all browser contexts
-    setTimeout(() => {
-      if (!window.location.pathname.startsWith('/app')) {
-        window.location.href = '/app/chat';
-      } else {
-        window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
-        document.documentElement.scrollTop = 0;
-        document.body.scrollTop = 0;
-      }
-    }, 50);
+    window.scrollTo({ top: 0, left: 0, behavior: 'instant' });
+    document.documentElement.scrollTop = 0;
+    document.body.scrollTop = 0;
   };
 
   return (
