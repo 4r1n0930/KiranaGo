@@ -5,7 +5,7 @@ import './HeroTitleOverlay.css';
 /**
  * HeroTitleOverlay Component
  * Persistent top-left title overlay visible across the entire hero scroll sequence.
- * Uses EncryptedText for a one-time decrypt effect on initial mount.
+ * Uses EncryptedText for a one-time decrypt effect on initial mount (takes ~1.8s total).
  */
 export default function HeroTitleOverlay() {
   return (
@@ -14,14 +14,20 @@ export default function HeroTitleOverlay() {
         <h1 className="hero-title-heading">
           <EncryptedText
             text="Welcome to KiranaGo"
-            revealDelayMs={40}
-            flipDelayMs={40}
+            revealDelayMs={95}
+            flipDelayMs={60}
             encryptedClassName="text-blue-400 font-mono"
             revealedClassName="text-white font-extrabold"
           />
         </h1>
         <p className="hero-title-subtitle">
-          Turn WhatsApp orders into a running store.
+          <EncryptedText
+            text="Turn WhatsApp orders into a running store."
+            revealDelayMs={45}
+            flipDelayMs={40}
+            encryptedClassName="text-gray-400 font-mono"
+            revealedClassName="text-gray-200 font-normal"
+          />
         </p>
       </div>
     </div>

@@ -10,7 +10,7 @@ import './ScrollHint.css';
  * @param {number} props.scrollProgress - Current scroll progress (0 to 1)
  */
 export default function ScrollHint({ scrollProgress }) {
-  // Fade out completely by progress 0.05
+  // Visible at progress 0, fades out completely by progress 0.05
   const opacity = Math.max(0, Math.min(1, 1 - scrollProgress / 0.05));
 
   if (opacity <= 0) return null;
@@ -24,7 +24,7 @@ export default function ScrollHint({ scrollProgress }) {
       }}
       aria-hidden="true"
     >
-      <span className="scroll-hint-text">Scroll to explore</span>
+      <span className="scroll-hint-text">Scroll down to continue</span>
       <ChevronDown className="scroll-hint-icon" size={16} />
     </div>
   );
