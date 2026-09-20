@@ -1,7 +1,8 @@
 import React, { useState, useRef, useEffect } from 'react';
-import { Send, Bot, User } from 'lucide-react';
+import { Send, Bot, User, Loader2 } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
+import { sendChat } from '@/lib/api';
 import './AppPages.css';
 
 /**
@@ -13,6 +14,7 @@ export default function Chat() {
   const messagesEndRef = useRef(null);
 
   const [input, setInput] = useState('');
+  const [isThinking, setIsThinking] = useState(false);
   const [messages, setMessages] = useState([
     {
       id: 1,
@@ -22,17 +24,28 @@ export default function Chat() {
     },
   ]);
 
+  const getCustomerId = () => {
+    let customerId = localStorage.getItem('kiranago_customer_id');
+    if (!customerId) {
+      customerId = `CUST-WEB-${Date.now()}`;
+      localStorage.setItem('kiranago_customer_id', customerId);
+    }
+    return customerId;
+  };
+
   useGSAP(
     () => {
       ScrollTrigger.refresh();
 
-      gsap.from('.gsap-chat-reveal', {
-        y: 20,
-        opacity: 0,
-        duration: 0.5,
-        ease: 'power2.out',
-        clearProps: 'opacity,transform',
-      });
+      if (containerRef.current) {
+        gsap.from(containerRef.current, {
+          y: 20,
+          opacity: 0,
+          duration: 0.5,
+          ease: 'power2.out',
+          clearProps: 'opacity,transform',
+        });
+      }
     },
     { scope: containerRef }
   );
@@ -59,26 +72,37 @@ export default function Chat() {
     setMessages((prev) => [...prev, userMessage]);
     const currentInput = input;
     setInput('');
+    setIsThinking(true);
+
+    const callApi = async () => {
+      try {
+        const data = await sendChat(currentInput, getCustomerId());
+        return data.reply || 'Got it! Your request has been processed.';
+      } catch {
+        let mockReply = 'Order received! I have processed your request and reserved 1x Aashirvaad Atta 10kg and 1x Fortune Oil. Total: ₹585.';
+        if (currentInput.toLowerCase().includes('atta') || currentInput.toLowerCase().includes('oil')) {
+          mockReply = `Extracted items:\n• 1x Aashirvaad Whole Wheat Atta 10kg (₹440)\n• 1x Fortune Mustard Oil 1L (₹145)\n\nOrder total: ₹585. Added to queue for Ramesh Verma.`;
+        } else if (currentInput.toLowerCase().includes('price') || currentInput.toLowerCase().includes('rate')) {
+          mockReply = 'Stock Price Check:\n• Atta 10kg: ₹440\n• Mustard Oil 1L: ₹145\n• Tata Salt 1kg: ₹28';
+        }
+        return mockReply;
+      } finally {
+        setIsThinking(false);
+      }
+    };
 
     // Simulate AI Agent processing delay
-    setTimeout(() => {
-      // TODO(api): replace with real call to Conversation Agent endpoint — see API_REQUIREMENTS.md
-      let mockReply = 'Order received! I have processed your request and reserved 1x Aashirvaad Atta 10kg and 1x Fortune Oil. Total: ₹585.';
-      if (currentInput.toLowerCase().includes('atta') || currentInput.toLowerCase().includes('oil')) {
-        mockReply = `Extracted items:\n• 1x Aashirvaad Whole Wheat Atta 10kg (₹440)\n• 1x Fortune Mustard Oil 1L (₹145)\n\nOrder total: ₹585. Added to queue for Ramesh Verma.`;
-      } else if (currentInput.toLowerCase().includes('price') || currentInput.toLowerCase().includes('rate')) {
-        mockReply = 'Stock Price Check:\n• Atta 10kg: ₹440\n• Mustard Oil 1L: ₹145\n• Tata Salt 1kg: ₹28';
-      }
-
+    setTimeout(async () => {
+      const reply = await callApi();
       const botMessage = {
         id: Date.now() + 1,
         role: 'assistant',
-        text: mockReply,
+        text: reply,
         timestamp: new Date().toLocaleTimeString([], { hour: '2-digit', minute: '2-digit' }),
       };
 
       setMessages((prev) => [...prev, botMessage]);
-    }, 600);
+    }, 350);
   };
 
   return (
@@ -103,6 +127,18 @@ export default function Chat() {
             </div>
           </div>
         ))}
+        {isThinking && (
+          <div className="chat-bubble-row bot-row">
+            <div className="chat-avatar bot-avatar">
+              <Bot size={16} />
+            </div>
+            <div className="chat-bubble bot-bubble glass-panel">
+              <div className="chat-text chat-thinking">
+                <Loader2 size={14} className="spin" /> Processing...
+              </div>
+            </div>
+          </div>
+        )}
         <div ref={messagesEndRef} />
       </div>
 

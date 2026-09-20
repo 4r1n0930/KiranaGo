@@ -199,6 +199,27 @@
   white-space: pre-wrap;
 }
 
+.chat-thinking {
+  display: flex;
+  align-items: center;
+  gap: 8px;
+  color: var(--color-slate-muted);
+  font-style: italic;
+}
+
+.spin {
+  animation: kirana-spin 1s linear infinite;
+}
+
+@keyframes kirana-spin {
+  from {
+    transform: rotate(0deg);
+  }
+  to {
+    transform: rotate(360deg);
+  }
+}
+
 .chat-time {
   font-size: 0.72rem;
   opacity: 0.6;
