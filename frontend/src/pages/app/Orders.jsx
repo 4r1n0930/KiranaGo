@@ -1,8 +1,9 @@
-import React, { useState, useRef } from 'react';
+import React, { useState, useRef, useEffect } from 'react';
 import { ChevronDown, ChevronUp, ShoppingBag, Clock, User, Phone, CheckCircle2 } from 'lucide-react';
 import { useGSAP } from '@gsap/react';
 import { gsap, ScrollTrigger } from '@/lib/gsap';
 import { MOCK_ORDERS } from '@/data/mockData';
+import { fetchOrders } from '@/lib/api';
 import './AppPages.css';
 
 /**
@@ -12,9 +13,23 @@ import './AppPages.css';
 export default function Orders() {
   const containerRef = useRef(null);
   const [expandedOrderId, setExpandedOrderId] = useState(null);
+  const [orders, setOrders] = useState(MOCK_ORDERS);
 
-  // TODO(api): replace with real GET /orders and GET /orders/:id — see API_REQUIREMENTS.md
-  const orders = MOCK_ORDERS;
+  useEffect(() => {
+    let active = true;
+    fetchOrders()
+      .then((data) => {
+        if (active && Array.isArray(data.orders) && data.orders.length > 0) {
+          setOrders(data.orders);
+        }
+      })
+      .catch(() => {
+        // Keep MOCK_ORDERS fallback when API is unreachable
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   useGSAP(
     () => {

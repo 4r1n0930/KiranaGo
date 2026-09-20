@@ -1,16 +1,35 @@
-import React from 'react';
+import React, { useState, useEffect } from 'react';
 import { Link, NavLink } from 'react-router-dom';
+import { fetchInventory } from '@/lib/api';
 import './Pages.css';
 
+const SAMPLE_INVENTORY = [
+  { id: 1, name: 'Aashirvaad Whole Wheat Atta 10kg', category: 'Staples', stock: 4, unit: 'bags', price: '₹440', status: 'Low Stock' },
+  { id: 2, name: 'Fortune Mustard Oil 1L', category: 'Oils & Ghee', stock: 2, unit: 'pouches', price: '₹145', status: 'Low Stock' },
+  { id: 3, name: 'Tata Salt 1kg', category: 'Spices & Salt', stock: 35, unit: 'packets', price: '₹28', status: 'In Stock' },
+  { id: 4, name: 'Madhur Sugar 5kg', category: 'Staples', stock: 1, unit: 'bag', price: '₹225', status: 'Critical' },
+  { id: 5, name: 'Red Label Tea 500g', category: 'Beverages', stock: 18, unit: 'packs', price: '₹310', status: 'In Stock' },
+  { id: 6, name: 'Maggi 2-Minute Noodles 12-Pack', category: 'Instant Food', stock: 12, unit: 'boxes', price: '₹168', status: 'In Stock' }
+];
+
 export default function Inventory() {
-  const sampleInventory = [
-    { id: 1, name: 'Aashirvaad Whole Wheat Atta 10kg', category: 'Staples', stock: 4, unit: 'bags', price: '₹440', status: 'Low Stock' },
-    { id: 2, name: 'Fortune Mustard Oil 1L', category: 'Oils & Ghee', stock: 2, unit: 'pouches', price: '₹145', status: 'Low Stock' },
-    { id: 3, name: 'Tata Salt 1kg', category: 'Spices & Salt', stock: 35, unit: 'packets', price: '₹28', status: 'In Stock' },
-    { id: 4, name: 'Madhur Sugar 5kg', category: 'Staples', stock: 1, unit: 'bag', price: '₹225', status: 'Critical' },
-    { id: 5, name: 'Red Label Tea 500g', category: 'Beverages', stock: 18, unit: 'packs', price: '₹310', status: 'In Stock' },
-    { id: 6, name: 'Maggi 2-Minute Noodles 12-Pack', category: 'Instant Food', stock: 12, unit: 'boxes', price: '₹168', status: 'In Stock' }
-  ];
+  const [inventory, setInventory] = useState(SAMPLE_INVENTORY);
+
+  useEffect(() => {
+    let active = true;
+    fetchInventory()
+      .then((data) => {
+        if (active && Array.isArray(data) && data.length > 0) {
+          setInventory(data);
+        }
+      })
+      .catch(() => {
+        // Keep SAMPLE_INVENTORY fallback when API is unreachable
+      });
+    return () => {
+      active = false;
+    };
+  }, []);
 
   return (
     <div className="dashboard-layout">
@@ -52,7 +71,7 @@ export default function Inventory() {
         <div className="table-card">
           <div className="table-header">
             <input type="text" placeholder="Search inventory (e.g., Atta, Oil)..." className="search-input" />
-            <div className="filter-badge">Total Items: {sampleInventory.length}</div>
+            <div className="filter-badge">Total Items: {inventory.length}</div>
           </div>
           <table className="data-table">
             <thead>
@@ -65,7 +84,7 @@ export default function Inventory() {
               </tr>
             </thead>
             <tbody>
-              {sampleInventory.map((item) => (
+              {inventory.map((item) => (
                 <tr key={item.id}>
                   <td className="font-semibold">{item.name}</td>
                   <td>{item.category}</td>
