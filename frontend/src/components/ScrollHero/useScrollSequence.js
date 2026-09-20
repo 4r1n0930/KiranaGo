@@ -6,7 +6,7 @@ import { useState, useEffect, useRef, useCallback } from 'react';
  * @param {Object} options
  * @param {number} options.totalFrames - Total number of sequence frames (default 179)
  * @param {Function} options.getFramePath - Function returning image path for a 1-indexed frame
- * @returns {Object} { containerRef, canvasRef, isLoading, loadProgress, currentFrameIndex, images, calculateFrameIndex }
+ * @returns {Object} { containerRef, canvasRef, isLoading, loadProgress, currentFrameIndex, scrollProgress, images, calculateFrameIndex }
  */
 export function useScrollSequence({
   totalFrames = 179,
@@ -19,6 +19,7 @@ export function useScrollSequence({
   const [isLoading, setIsLoading] = useState(true);
   const [loadProgress, setLoadProgress] = useState(0);
   const [currentFrameIndex, setCurrentFrameIndex] = useState(1);
+  const [scrollProgress, setScrollProgress] = useState(0);
 
   const rafIdRef = useRef(null);
 
@@ -65,7 +66,7 @@ export function useScrollSequence({
     };
   }, [totalFrames, getFramePath]);
 
-  // Calculate the target frame index based on container scroll progress within viewport
+  // Calculate target frame index & normalized scroll progress (0 to 1)
   const calculateFrameIndex = useCallback(() => {
     if (!containerRef.current) return 1;
 
@@ -73,12 +74,17 @@ export function useScrollSequence({
     const viewportHeight = window.innerHeight || document.documentElement.clientHeight;
     const totalScrollableDistance = rect.height - viewportHeight;
 
-    if (totalScrollableDistance <= 0) return 1;
+    if (totalScrollableDistance <= 0) {
+      setScrollProgress(0);
+      return 1;
+    }
 
     // Scrolled distance inside container (0 when top is at top of viewport)
     const scrolledDistance = -rect.top;
     const rawProgress = scrolledDistance / totalScrollableDistance;
     const clampedProgress = Math.max(0, Math.min(1, rawProgress));
+
+    setScrollProgress(clampedProgress);
 
     // Map clamped 0..1 scroll ratio to 1..totalFrames (rounded to nearest integer)
     const frameIndex = Math.min(
@@ -158,6 +164,7 @@ export function useScrollSequence({
     isLoading,
     loadProgress,
     currentFrameIndex,
+    scrollProgress,
     images,
     calculateFrameIndex
   };

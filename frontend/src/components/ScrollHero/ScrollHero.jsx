@@ -12,10 +12,12 @@ import './ScrollHero.css';
  * @param {Object} props
  * @param {number} [props.scrollLengthMultiplier=3.5] - Multiplier for viewport scroll length (e.g. 3.5x 100dvh)
  * @param {number} [props.totalFrames=179] - Total frame count in sequence
+ * @param {React.ReactNode|Function} [props.children] - Children or render prop function receiving ({ scrollProgress })
  */
 export default function ScrollHero({
   scrollLengthMultiplier = 3.5,
-  totalFrames = 179
+  totalFrames = 179,
+  children
 }) {
   const {
     containerRef,
@@ -23,6 +25,7 @@ export default function ScrollHero({
     isLoading,
     loadProgress,
     currentFrameIndex,
+    scrollProgress,
     images,
     calculateFrameIndex
   } = useScrollSequence({ totalFrames });
@@ -143,6 +146,8 @@ export default function ScrollHero({
             </div>
           </div>
         )}
+
+        {typeof children === 'function' ? children({ scrollProgress, currentFrameIndex }) : children}
       </div>
     </div>
   );
