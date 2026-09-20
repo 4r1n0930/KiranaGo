@@ -20,7 +20,7 @@ export default function AppLayout() {
       {/* Top Header */}
       <header className="app-top-header">
         <div className="header-content">
-          <Link to="/" className="back-link">
+          <Link to="/app" className="back-link">
             <ArrowLeft size={16} />
             <span>Hero Landing</span>
           </Link>
@@ -39,8 +39,7 @@ export default function AppLayout() {
       {/* Persistent Floating Glassmorphism Pill Navigation Bar */}
       <nav className="app-pill-navbar glass-panel--dark">
         <NavLink
-          to="/app"
-          end
+          to="/app/home"
           className={({ isActive }) => `pill-nav-item ${isActive ? 'active' : ''}`}
         >
           <Home size={18} />

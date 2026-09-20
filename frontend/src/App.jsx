@@ -15,7 +15,7 @@
  */
 
 import React, { useEffect } from 'react';
-import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
+import { BrowserRouter, Routes, Route, Navigate, useLocation } from 'react-router-dom';
 import Landing from './pages/Landing';
 import AppLayout from './components/AppLayout';
 import Home from './pages/app/Home';
@@ -49,13 +49,15 @@ function App() {
     <BrowserRouter>
       <ScrollToTop />
       <Routes>
-        <Route path="/" element={<Landing />} />
+        {/* / redirects to /app (which is the Landing Page) */}
+        <Route path="/" element={<Home/>} />
+        <Route path="/app" element={<Home/>} />
 
         {/* /app shell with shared AppLayout */}
-        <Route path="/app" element={<AppLayout />}>
-          <Route index element={<Home />} />
-          <Route path="chat" element={<Chat />} />
-          <Route path="orders" element={<AppOrders />} />
+        <Route element={<AppLayout />}>
+          <Route path="/app/home" element={<Home />} />
+          <Route path="/app/chat" element={<Chat />} />
+          <Route path="/app/orders" element={<AppOrders />} />
         </Route>
 
         {/* Legacy / Dashboard routes */}
@@ -64,6 +66,15 @@ function App() {
         <Route path="/dashboard/orders" element={<DashboardOrders />} />
         <Route path="/dashboard/alerts" element={<Alerts />} />
         <Route path="/login" element={<Login />} />
+
+        {/* Shortcut / Direct path redirects */}
+        <Route path="/chat" element={<Navigate to="/app/chat" replace />} />
+        <Route path="/inventory" element={<Navigate to="/dashboard/inventory" replace />} />
+        <Route path="/orders" element={<Navigate to="/app/orders" replace />} />
+        <Route path="/alerts" element={<Navigate to="/dashboard/alerts" replace />} />
+
+        {/* Catch-all 404 fallback route */}
+        <Route path="*" element={<Navigate to="/app" replace />} />
       </Routes>
     </BrowserRouter>
   );

@@ -8,7 +8,7 @@ export default function Dashboard() {
       {/* Sidebar Navigation */}
       <aside className="dashboard-sidebar">
         <div className="sidebar-brand">
-          <Link to="/">🏬 KiranaGo</Link>
+          <Link to="/app">🏬 KiranaGo</Link>
         </div>
         <nav className="sidebar-nav">
           <NavLink to="/dashboard" end className={({ isActive }) => (isActive ? 'sidebar-link active' : 'sidebar-link')}>
@@ -25,7 +25,7 @@ export default function Dashboard() {
           </NavLink>
         </nav>
         <div className="sidebar-footer">
-          <Link to="/" className="sidebar-link">← Back to Home</Link>
+          <Link to="/app" className="sidebar-link">← Back to Home</Link>
         </div>
       </aside>
 
