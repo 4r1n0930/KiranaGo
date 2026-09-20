@@ -1,14 +1,19 @@
 @import "tailwindcss";
 
 :root {
-  /* KiranaGo Design Tokens */
-  --color-abyssal-ink: #090d16;
-  --color-bioluminescent-lime: #a3e635;
-  --color-bone-white: #f7f7f5;
-  --color-paper: #e5e7eb;
-  --color-slate-muted: #9ca3af;
-  --color-ocean-blue: #2563eb;
-  
+  /* KiranaGo Soft Pastel Design Tokens */
+  --color-abyssal-ink: #3a3a52;      /* soft muted plum-navy dark background */
+  --color-bioluminescent-lime: #b8e0d2;  /* soft pastel mint/sage accent */
+  --color-bone-white: #fdf6f0;       /* warm pastel cream */
+  --color-paper: #ffffff;            /* crisp white primary text */
+  --color-slate-muted: #b8b8d0;      /* soft lavender-slate secondary text */
+  --color-ocean-blue: #7092ff;       /* soft pastel blue accent */
+  --color-graphite: #8b8ba7;         /* soft muted lavender-gray */
+  --color-lichen: #e8d5d5;           /* soft dusty pink-beige */
+  --color-tissue: #f3e6e6;           /* pale pastel pink */
+  --color-frost: #f0f0f5;            /* pale lavender-white */
+  --color-void: #2d2d42;             /* deep muted plum */
+
   --font-sans: system-ui, -apple-system, BlinkMacSystemFont, 'Segoe UI', Roboto, sans-serif;
   --font-display: 'Inter Tight', system-ui, -apple-system, BlinkMacSystemFont, sans-serif;
   --font-mono: 'Roboto Mono', ui-monospace, Consolas, monospace;
@@ -47,31 +52,31 @@ body {
 
 /* 
   Glassmorphism Surface Utilities
-  NOTE: This is a deliberate design exception scoped strictly to elevated surfaces
-  (cards, chat bubbles, navigation bars, modals) to maintain contrast over dynamic backgrounds.
+  NOTE: Scoped strictly to elevated surfaces (cards, chat bubbles, navigation bars, modals)
+  to maintain contrast over pastel backgrounds.
 */
 .glass-panel {
-  background: rgba(247, 247, 245, 0.05);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(253, 246, 240, 0.08);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--radius-cards, 20px);
 }
 
 .glass-panel--dark {
-  background: rgba(9, 13, 22, 0.45);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(45, 45, 66, 0.55);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(255, 255, 255, 0.18);
   border-radius: var(--radius-cards, 20px);
   color: var(--color-paper);
 }
 
 .glass-panel--light {
-  background: rgba(255, 255, 255, 0.45);
-  backdrop-filter: blur(22px);
-  -webkit-backdrop-filter: blur(22px);
-  border: 1px solid rgba(255, 255, 255, 0.15);
+  background: rgba(255, 255, 255, 0.70);
+  backdrop-filter: blur(20px);
+  -webkit-backdrop-filter: blur(20px);
+  border: 1px solid rgba(232, 213, 213, 0.40);
   border-radius: var(--radius-cards, 20px);
-  color: #111827;
+  color: #2d2d42;
 }

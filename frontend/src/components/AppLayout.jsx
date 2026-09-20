@@ -1,4 +1,4 @@
-import React from 'react';
+import React, { useEffect } from 'react';
 import { NavLink, Outlet, Link } from 'react-router-dom';
 import { Home, MessageSquare, ShoppingBag, ArrowLeft } from 'lucide-react';
 import './AppLayout.css';
@@ -9,6 +9,9 @@ import './AppLayout.css';
  * Features a persistent floating Pill Navigation Bar with glassmorphism styling.
  */
 export default function AppLayout() {
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, []);
   return (
     <div className="app-layout-wrapper">
       {/* Top Header */}

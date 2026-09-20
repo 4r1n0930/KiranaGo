@@ -14,8 +14,8 @@
  * - /login               -> src/pages/Login.jsx
  */
 
-import React from 'react';
-import { BrowserRouter, Routes, Route } from 'react-router-dom';
+import React, { useEffect } from 'react';
+import { BrowserRouter, Routes, Route, useLocation } from 'react-router-dom';
 import Landing from './pages/Landing';
 import AppLayout from './components/AppLayout';
 import Home from './pages/app/Home';
@@ -28,9 +28,24 @@ import Alerts from './pages/Alerts';
 import Login from './pages/Login';
 import './App.css';
 
+/**
+ * ScrollToTop Component
+ * Resets window scroll position to (0, 0) whenever the route path changes.
+ */
+function ScrollToTop() {
+  const { pathname } = useLocation();
+
+  useEffect(() => {
+    window.scrollTo(0, 0);
+  }, [pathname]);
+
+  return null;
+}
+
 function App() {
   return (
     <BrowserRouter>
+      <ScrollToTop />
       <Routes>
         <Route path="/" element={<Landing />} />
 

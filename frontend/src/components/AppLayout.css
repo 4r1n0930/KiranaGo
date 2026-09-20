@@ -100,12 +100,12 @@
 }
 
 .pill-nav-item:hover {
-  color: #ffffff;
+  color: var(--color-paper);
   background: rgba(255, 255, 255, 0.08);
 }
 
 .pill-nav-item.active {
-  background: linear-gradient(135deg, var(--color-ocean-blue), #1d4ed8);
+  background: linear-gradient(135deg, var(--color-ocean-blue), #5074e6);
   color: #ffffff;
-  box-shadow: 0 4px 14px rgba(37, 99, 235, 0.4);
+  box-shadow: 0 4px 14px rgba(112, 146, 255, 0.4);
 }
