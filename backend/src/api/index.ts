@@ -71,6 +71,16 @@ function inventoryStatus(stock: number, reorderThreshold: number): string {
   return 'In Stock';
 }
 
+async function generateProductId(): Promise<string> {
+  const products = await Product.find({}, 'productId').lean();
+  let max = 0;
+  for (const product of products) {
+    const match = /^PROD-(\d+)$/.exec(product.productId || '');
+    if (match) max = Math.max(max, parseInt(match[1], 10));
+  }
+  return `PROD-${String(max + 1).padStart(3, '0')}`;
+}
+
 function serializeOrder(order: any, customer?: any) {
   return {
     orderId: order.orderId,
@@ -224,6 +234,122 @@ router.get('/inventory', async (req: Request, res: Response): Promise<void> => {
   } catch (error: any) {
     console.error('[API /inventory] Error fetching inventory:', error);
     res.status(500).json({ error: 'Failed to fetch inventory', details: error.message });
+  }
+});
+
+router.get('/products', async (req: Request, res: Response): Promise<void> => {
+  const search = (req.query.search as string) || '';
+
+  const query: any = {};
+  if (search) query.name = { $regex: search, $options: 'i' };
+
+  try {
+    const products = await Product.find(query).sort({ name: 1 });
+    res.json(products);
+  } catch (error: any) {
+    console.error('[API GET /products] Error fetching products:', error);
+    res.status(500).json({ error: 'Failed to fetch products', details: error.message });
+  }
+});
+
+router.post('/products', async (req: Request, res: Response): Promise<void> => {
+  const { name, category, price, stock, reorderThreshold, expiryDate } = req.body || {};
+
+  if (!name || !category) {
+    res.status(400).json({ error: 'name and category are required' });
+    return;
+  }
+
+  const parsedPrice = Number(price);
+  const parsedStock = Number(stock ?? 0);
+  const parsedThreshold = Number(reorderThreshold ?? 10);
+
+  if (isNaN(parsedPrice) || parsedPrice < 0) {
+    res.status(400).json({ error: 'price must be a non-negative number' });
+    return;
+  }
+
+  if (isNaN(parsedStock) || parsedStock < 0) {
+    res.status(400).json({ error: 'stock must be a non-negative number' });
+    return;
+  }
+
+  if (isNaN(parsedThreshold) || parsedThreshold < 0) {
+    res.status(400).json({ error: 'reorderThreshold must be a non-negative number' });
+    return;
+  }
+
+  let parsedExpiryDate: Date | undefined;
+  if (expiryDate) {
+    parsedExpiryDate = new Date(expiryDate);
+    if (isNaN(parsedExpiryDate.getTime())) {
+      res.status(400).json({ error: 'expiryDate must be a valid date' });
+      return;
+    }
+  }
+
+  try {
+    const productId = await generateProductId();
+    const product = await Product.create({
+      productId,
+      name,
+      category,
+      price: parsedPrice,
+      stock: parsedStock,
+      reorderThreshold: parsedThreshold,
+      ...(parsedExpiryDate ? { expiryDate: parsedExpiryDate } : {})
+    });
+
+    res.status(201).json(product);
+  } catch (error: any) {
+    console.error('[API POST /products] Error adding product:', error);
+    res.status(500).json({ error: 'Failed to add product', details: error.message });
+  }
+});
+
+router.post('/products/:id/stock', async (req: Request, res: Response): Promise<void> => {
+  const quantity = Number(req.body?.quantity);
+
+  if (isNaN(quantity) || quantity <= 0) {
+    res.status(400).json({ error: 'quantity must be a positive number' });
+    return;
+  }
+
+  try {
+    const product = await Product.findOneAndUpdate(
+      { productId: req.params.id },
+      { $inc: { stock: quantity } },
+      { new: true }
+    );
+
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    res.json({
+      productId: product.productId,
+      stock: product.stock,
+      added: quantity
+    });
+  } catch (error: any) {
+    console.error('[API POST /products/:id/stock] Error updating stock:', error);
+    res.status(500).json({ error: 'Failed to update stock', details: error.message });
+  }
+});
+
+router.delete('/products/:id', async (req: Request, res: Response): Promise<void> => {
+  try {
+    const product = await Product.findOneAndDelete({ productId: req.params.id });
+    if (!product) {
+      res.status(404).json({ error: 'Product not found' });
+      return;
+    }
+
+    res.json({ message: 'Product removed', productId: product.productId });
+  } catch (error: any) {
+    console.error('[API DELETE /products/:id] Error removing product:', error);
+    res.status(500).json({ error: 'Failed to remove product', details: error.message });
   }
 });
 
