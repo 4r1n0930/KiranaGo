@@ -682,3 +682,106 @@
   color: #9ca3af;
   margin-bottom: 12px;
 }
+
+/* Dashboard Sections */
+.dashboard-section {
+  margin-top: 36px;
+}
+
+.dashboard-section h2 {
+  font-size: 1.25rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0 0 16px;
+}
+
+/* Product Form */
+.product-form {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 24px;
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(220px, 1fr));
+  gap: 16px;
+  align-items: end;
+}
+
+.form-input {
+  width: 100%;
+  box-sizing: border-box;
+  padding: 10px 14px;
+  font-size: 0.95rem;
+}
+
+.form-input::placeholder {
+  color: #6b7280;
+}
+
+.product-form .btn {
+  justify-self: start;
+}
+
+.form-message {
+  grid-column: 1 / -1;
+  font-size: 0.9rem;
+  font-weight: 600;
+  margin: 0;
+  padding: 10px 14px;
+  border-radius: 8px;
+}
+
+.form-message.success {
+  background: rgba(16, 185, 129, 0.15);
+  color: #10b981;
+  border: 1px solid rgba(16, 185, 129, 0.3);
+}
+
+.form-message.error {
+  background: rgba(239, 68, 68, 0.15);
+  color: #ef4444;
+  border: 1px solid rgba(239, 68, 68, 0.3);
+}
+
+.btn-danger {
+  background: #dc2626;
+  color: #ffffff;
+}
+
+.btn-danger:hover {
+  background: #b91c1c;
+}
+
+.btn:disabled {
+  opacity: 0.6;
+  cursor: not-allowed;
+}
+
+/* Stock & Removal Actions */
+.stock-actions {
+  display: grid;
+  grid-template-columns: repeat(auto-fit, minmax(280px, 1fr));
+  gap: 20px;
+}
+
+.stock-action {
+  background: #111827;
+  border: 1px solid #1f2937;
+  border-radius: 12px;
+  padding: 24px;
+  display: flex;
+  flex-direction: column;
+  gap: 16px;
+}
+
+.stock-action h3 {
+  font-size: 1.05rem;
+  font-weight: 700;
+  color: #ffffff;
+  margin: 0;
+}
+
+.stock-action .form-message {
+  grid-column: auto;
+  margin: 0;
+}
